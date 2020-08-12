@@ -37,8 +37,9 @@ const Content = (props) => {
           flexWrap: 'wrap',
         }}
       >
-        {tracks.length !== 0
-          ? tracks.map((track) => (
+        {tracks.length === 0
+          ? 'No results'
+          : tracks.map((track) => (
               <Grid key={track.id} item xs={12}>
                 <NavLink to={`/song/${track.id}`}>
                   <TrackCard
@@ -50,8 +51,7 @@ const Content = (props) => {
                   />
                 </NavLink>
               </Grid>
-            ))
-          : 'No results'}
+            ))}
       </div>
     </div>
   );

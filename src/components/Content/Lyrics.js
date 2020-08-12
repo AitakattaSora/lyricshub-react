@@ -1,6 +1,8 @@
 import React from 'react';
 
 const Lyrics = ({ content, minimal }) => {
+  if (!content) return <React.Fragment>No lyrics yet :(</React.Fragment>;
+
   let lines = content.split('\n');
 
   // filter lines with section header and empty ones'
@@ -13,16 +15,14 @@ const Lyrics = ({ content, minimal }) => {
 
   return (
     <React.Fragment>
-      {lines.length > 3
-        ? lines.map((line, i) => {
-            return (
-              <span key={i}>
-                {line}
-                <br />
-              </span>
-            );
-          })
-        : 'no lyrics'}
+      {lines.map((line, i) => {
+        return (
+          <span key={i}>
+            {line}
+            <br />
+          </span>
+        );
+      })}
     </React.Fragment>
   );
 };
