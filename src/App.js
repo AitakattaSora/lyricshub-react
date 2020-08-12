@@ -1,26 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Content from './components/Content/Content';
+import { Header, Footer } from './components/Layout';
+import SongPage from './components/SongPage';
+import { Grid } from '@material-ui/core';
+import { Route, Switch } from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div class='app-container'>
+      <Header />
+      <Grid container>
+        <Grid xs={false} sm={2} item></Grid>
+        <Grid xs={12} sm={8} item container>
+          <Switch>
+            <Route exact path='/' component={Content} />
+            <Route exact path='/song/:id?' component={SongPage} />
+          </Switch>
+        </Grid>
+        <Grid item xs={false} sm={2}></Grid>
+      </Grid>
+      <Footer />
     </div>
   );
-}
+};
 
 export default App;
