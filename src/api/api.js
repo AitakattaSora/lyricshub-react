@@ -41,4 +41,10 @@ export const LyricsAPI = {
 
     return response.data;
   },
+
+  updateTrackLyrics: async (track) => {
+    const response = await instance.put(`lyrics/${track.id}`, track);
+
+    return response;
+  },
 };

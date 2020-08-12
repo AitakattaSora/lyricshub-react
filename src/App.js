@@ -8,7 +8,7 @@ import { Route, Switch } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div class='app-container'>
+    <div className='app-container'>
       <Header />
       <Grid container>
         <Grid xs={false} sm={2} item></Grid>

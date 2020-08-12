@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import TrackCard from './TrackCard';
-import { setSearch } from '../../redux/reducers/queries-reducer';
+import { setSearch, setSubmitting } from '../../redux/reducers/queries-reducer';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { LyricsAPI } from '../../api/api';
+import Loader from '../common/Loader';
 
 const Content = (props) => {
   const [tracks, setTracks] = useState([]);
@@ -23,8 +24,12 @@ const Content = (props) => {
     });
   }, [query, props.query]);
 
+  if (props.isSubmitting) {
+    return <Loader />;
+  }
+
   return (
-    <div class='content'>
+    <div className='content'>
       <div
         className='tracksList'
         style={{
@@ -32,10 +37,9 @@ const Content = (props) => {
           flexWrap: 'wrap',
         }}
       >
-        {!tracks
-          ? 'Loading'
-          : tracks.length !== 0
-          ? tracks.map((track) => (
+        {tracks.length === 0
+          ? 'No results'
+          : tracks.map((track) => (
               <Grid key={track.id} item xs={12}>
                 <NavLink to={`/song/${track.id}`}>
                   <TrackCard
@@ -47,8 +51,7 @@ const Content = (props) => {
                   />
                 </NavLink>
               </Grid>
-            ))
-          : 'No results'}
+            ))}
       </div>
     </div>
   );
@@ -57,8 +60,8 @@ const Content = (props) => {
 const mapStateToProps = (state) => {
   return {
     query: state.queries.searchQuery,
-    tracks: state.queries.tracks,
+    isSubmitting: state.queries.isSubmitting,
   };
 };
 
-export default connect(mapStateToProps, { setSearch })(Content);
+export default connect(mapStateToProps, { setSearch, setSubmitting })(Content);
