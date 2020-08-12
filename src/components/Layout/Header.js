@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSearch } from '../../redux/reducers/queries-reducer';
+import { setSearch, setSubmitting } from '../../redux/reducers/queries-reducer';
 import { TextField } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -18,9 +18,12 @@ const Header = (props) => {
       <div className='searchBar'>
         <Formik
           initialValues={{ search: '' }}
-          onSubmit={(data) => {
-            props.setQuery(data.search);
+          onSubmit={(data, { resetForm }) => {
+            props.setSubmitting(true);
+            props.setSearch(data.search);
             routeChange();
+            props.setSubmitting(false);
+            resetForm();
           }}
         >
           {({ values, handleChange, handleSubmit }) => (
@@ -64,12 +67,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setQuery: (query) => {
-      dispatch(setSearch(query));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, { setSearch, setSubmitting })(Header);
