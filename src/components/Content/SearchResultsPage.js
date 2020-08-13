@@ -7,17 +7,12 @@ import { NavLink } from 'react-router-dom';
 import { LyricsAPI } from '../../api/api';
 import Loader from '../common/Loader';
 
-const Content = (props) => {
-  const [tracks, setTracks] = useState([]);
+const SearchResultsPage = (props) => {
+  const [tracks, setTracks] = useState(null);
   const [query, setQuery] = useState(props.query);
 
   useEffect(() => {
     setQuery(props.query);
-
-    if (query === '') {
-      setTracks([]);
-      return;
-    }
 
     LyricsAPI.getTracksByQuery(props.query).then((data) => {
       setTracks(data);
@@ -28,13 +23,16 @@ const Content = (props) => {
     return <Loader />;
   }
 
+  if (tracks === null) {
+    return <div className='search-page'>Idi nahui</div>;
+  }
+
+  if (tracks.length === 0) {
+    return <div className='search-page'>No results</div>;
+  }
+
   return (
-    <div
-      className='content'
-      style={{
-        paddingTop: 30,
-      }}
-    >
+    <div className='content search-page'>
       <div
         className='tracksList'
         style={{
@@ -42,28 +40,26 @@ const Content = (props) => {
           flexWrap: 'wrap',
         }}
       >
-        {tracks.length === 0
-          ? 'No results'
-          : tracks.map((track) => (
-              <Grid
+        {tracks.map((track) => (
+          <Grid
+            key={track.id}
+            item
+            xs={12}
+            style={{
+              minWidth: '60vw',
+            }}
+          >
+            <NavLink to={`/song/${track.id}`}>
+              <TrackCard
                 key={track.id}
-                item
-                xs={12}
-                style={{
-                  minWidth: '60vw',
-                }}
-              >
-                <NavLink to={`/song/${track.id}`}>
-                  <TrackCard
-                    key={track.id}
-                    artists={track.artists}
-                    title={track.track}
-                    artwork={track.album.artwork}
-                    lyrics={track.lyrics}
-                  />
-                </NavLink>
-              </Grid>
-            ))}
+                artists={track.artists}
+                title={track.track}
+                artwork={track.album.artwork}
+                lyrics={track.lyrics}
+              />
+            </NavLink>
+          </Grid>
+        ))}
       </div>
     </div>
   );
@@ -76,4 +72,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { setSearch, setSubmitting })(Content);
+export default connect(mapStateToProps, { setSearch, setSubmitting })(
+  SearchResultsPage
+);

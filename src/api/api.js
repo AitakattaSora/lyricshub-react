@@ -6,7 +6,7 @@ const instance = axios.create({
 
 export const LyricsAPI = {
   getTracksByQuery: async (query) => {
-    if (!query) return [];
+    if (!query) return null;
 
     const response = await instance.get('lyrics', {
       params: { q: query },
