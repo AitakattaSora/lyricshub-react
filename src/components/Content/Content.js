@@ -29,7 +29,12 @@ const Content = (props) => {
   }
 
   return (
-    <div className='content'>
+    <div
+      className='content'
+      style={{
+        paddingTop: 30,
+      }}
+    >
       <div
         className='tracksList'
         style={{

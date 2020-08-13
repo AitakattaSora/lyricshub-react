@@ -11,7 +11,8 @@ const useStyles = makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 10,
+    width: '80vw',
+    marginBottom: 20,
     '&:hover': {
       cursor: 'pointer',
     },
@@ -41,7 +42,7 @@ const Track = (props) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root} raised onClick={onClick}>
+    <Card className={classes.root} onClick={onClick}>
       <CardMedia
         className={classes.media}
         image={artwork}

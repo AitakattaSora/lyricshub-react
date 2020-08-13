@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setSearch, setSubmitting } from '../../redux/reducers/queries-reducer';
-import { TextField } from '@material-ui/core';
+import { TextField, Button, IconButton } from '@material-ui/core';
 import { Formik } from 'formik';
 import { NavLink, useHistory } from 'react-router-dom';
+import SearchIcon from '@material-ui/icons/Search';
 
 const Header = (props) => {
   const history = useHistory();
@@ -41,15 +42,14 @@ const Header = (props) => {
                   borderRadius: 4,
                 }}
               />
-              {/* <Button
+              <IconButton
+                size='medium'
+                color='inherit'
                 type='submit'
-                style={{
-                  marginLeft: 20,
-                }}
-                variant='contained'
+                aria-label='search'
               >
-                Search
-              </Button> */}
+                <SearchIcon />
+              </IconButton>
             </form>
           )}
         </Formik>
