@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import Lyrics from './Content/Lyrics';
+import Lyrics from './Lyrics';
 import { Typography, Button, TextField } from '@material-ui/core';
-import { LyricsAPI } from '../api/api';
+import { LyricsAPI } from '../../api/api';
 import { Formik, Form } from 'formik';
-import styles from '../styles/SongPage.module.css';
+import styles from '../../styles/SongPage.module.css';
 import * as yup from 'yup';
-import Loader from './common/Loader';
+import Loader from '../common/Loader';
 
 const SongPage = (props) => {
   const trackId = props.match.params.id;
@@ -30,6 +30,10 @@ const SongPage = (props) => {
     return <div>No id provided</div>;
   }
 
+  if (!track) {
+    return <Loader />;
+  }
+
   const validationSchema = yup.object({
     lyrics: yup
       .string()
@@ -38,42 +42,58 @@ const SongPage = (props) => {
   });
 
   return (
-    <div style={{ marginBottom: 100 }}>
-      <div className={styles.actionsContainer}>
-        {!track ? (
-          <Loader />
-        ) : track.lyrics === null ? (
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={() => setEditMode(!editMode)}
+    <div className={styles.container} style={{ marginBottom: 100 }}>
+      <div className={styles.trackInfoContainer}>
+        <img src={track.album.artwork} alt='' />
+        <div className={styles.trackInfo}>
+          <Typography variant='h4' component='p'>
+            {track.track}
+          </Typography>
+          <Typography gutterBottom variant='h5' component='p'>
+            {track.artists[0]}
+          </Typography>
+          <Typography
+            style={{ color: '#9a9a9a' }}
+            variant='body1'
+            color='textPrimary'
+            component='p'
           >
-            Add lyrics
-          </Button>
-        ) : (
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={() => setEditMode(!editMode)}
-          >
-            Edit Lyrics
-          </Button>
-        )}
-
-        {editMode && (
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={() => setEditMode(false)}
-          >
-            Cancel
-          </Button>
-        )}
+            Album
+            <span>{track.album.name}</span>
+          </Typography>
+        </div>
       </div>
-      <div className='lyricsContainer'>
-        {track ? (
-          editMode ? (
-            // Show editForm with lyrics if track is not null and editMode is OFF
+      <div className={styles.lyricsDataContainer}>
+        <div className={styles.actionsContainer}>
+          {track.lyrics === null ? (
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => setEditMode(!editMode)}
+            >
+              Add lyrics
+            </Button>
+          ) : (
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => setEditMode(!editMode)}
+            >
+              Edit Lyrics
+            </Button>
+          )}
+          {editMode && (
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => setEditMode(false)}
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
+        <div className='lyricsContainer'>
+          {editMode ? (
             <Formik
               initialValues={{ lyrics: track.lyrics }}
               validationSchema={validationSchema}
@@ -147,15 +167,11 @@ const SongPage = (props) => {
               }}
             </Formik>
           ) : (
-            // Show the lyrics as text if track is not null and editMode is OFF
             <Typography variant='body1' color='textPrimary' component='p'>
               <Lyrics content={track.lyrics} />
             </Typography>
-          )
-        ) : (
-          // Error message if track is null
-          <Loader />
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

@@ -29,7 +29,12 @@ const Content = (props) => {
   }
 
   return (
-    <div className='content'>
+    <div
+      className='content'
+      style={{
+        paddingTop: 30,
+      }}
+    >
       <div
         className='tracksList'
         style={{
@@ -40,7 +45,14 @@ const Content = (props) => {
         {tracks.length === 0
           ? 'No results'
           : tracks.map((track) => (
-              <Grid key={track.id} item xs={12}>
+              <Grid
+                key={track.id}
+                item
+                xs={12}
+                style={{
+                  minWidth: '60vw',
+                }}
+              >
                 <NavLink to={`/song/${track.id}`}>
                   <TrackCard
                     key={track.id}
