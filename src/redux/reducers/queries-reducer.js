@@ -2,7 +2,7 @@ const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
 const SET_SUBMITTING = 'SET_SUBMITTING';
 
 const initialState = {
-  searchQuery: 'anime',
+  searchQuery: '',
   isSubmitting: false,
 };
 

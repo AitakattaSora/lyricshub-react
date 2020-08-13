@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'row',
-    width: '80vw',
+    overflow: 'hidden',
     marginBottom: 20,
     '&:hover': {
       cursor: 'pointer',
@@ -49,10 +49,15 @@ const Track = (props) => {
         title='Album cover'
       />
       <CardContent>
-        <Typography gutterBottom variant='h5' component='h2'>
+        <Typography variant='h5' component='h2'>
           {title}
         </Typography>
-        <Typography variant='body2' color='textSecondary' component='p'>
+        <Typography
+          variant='body2'
+          color='textSecondary'
+          component='p'
+          gutterBottom
+        >
           {songArtists}
         </Typography>
         <Typography variant='body2' color='textPrimary' component='p'>

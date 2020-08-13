@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import Lyrics from './Content/Lyrics';
+import Lyrics from './Lyrics';
 import { Typography, Button, TextField } from '@material-ui/core';
-import { LyricsAPI } from '../api/api';
+import { LyricsAPI } from '../../api/api';
 import { Formik, Form } from 'formik';
-import styles from '../styles/SongPage.module.css';
+import styles from '../../styles/SongPage.module.css';
 import * as yup from 'yup';
-import Loader from './common/Loader';
+import Loader from '../common/Loader';
 
 const SongPage = (props) => {
   const trackId = props.match.params.id;
