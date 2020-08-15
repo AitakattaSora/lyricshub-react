@@ -5,14 +5,19 @@ const instance = axios.create({
 });
 
 export const LyricsAPI = {
-  getTracksByQuery: async (query) => {
-    if (!query) return null;
-
+  getTracksByQuery: async (query, pageNumber = 1, pageSize) => {
     const response = await instance.get('lyrics', {
-      params: { q: query },
+      params: {
+        q: query,
+        _page: pageNumber,
+        _limit: pageSize,
+      },
     });
 
-    return response.data;
+    return {
+      data: response.data,
+      total: response.headers['x-total-count'],
+    };
   },
 
   getTrack: async (trackId) => {

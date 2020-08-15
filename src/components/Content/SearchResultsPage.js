@@ -1,30 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import TrackCard from './TrackCard';
-import { setSearch, setSubmitting } from '../../redux/reducers/queries-reducer';
+import {
+  setSubmitting,
+  setCurrentPage,
+} from '../../redux/reducers/queries-reducer';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { LyricsAPI } from '../../api/api';
 import Loader from '../common/Loader';
+import MyPagination from '../common/MyPagination';
 
-const SearchResultsPage = (props) => {
-  const [tracks, setTracks] = useState(null);
-  const [query, setQuery] = useState(props.query);
+const SearchResultsPage = ({
+  query,
+  currentPage,
+  isSubmitting,
+  setSubmitting,
+  setCurrentPage,
+}) => {
+  const [tracks, setTracks] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const pageSize = 5;
 
   useEffect(() => {
-    setQuery(props.query);
+    setSubmitting(true);
 
-    LyricsAPI.getTracksByQuery(props.query).then((data) => {
-      setTracks(data);
-    });
-  }, [query, props.query]);
+    LyricsAPI.getTracksByQuery(query, currentPage, pageSize).then(
+      ({ data, total }) => {
+        setTotal(Math.ceil(total / pageSize));
+        setSubmitting(false);
+        setTracks(data);
+      }
+    );
+  }, [query, currentPage, setSubmitting]);
 
-  if (props.isSubmitting) {
+  if (isSubmitting) {
     return <Loader />;
-  }
-
-  if (tracks === null) {
-    return <div className='search-page'>Idi nahui</div>;
   }
 
   if (tracks.length === 0) {
@@ -32,7 +44,14 @@ const SearchResultsPage = (props) => {
   }
 
   return (
-    <div className='content search-page'>
+    <div className='search-page'>
+      <div className='pagionation' style={{ marginBottom: 20 }}>
+        <MyPagination
+          total={total}
+          page={currentPage}
+          handleChange={setCurrentPage}
+        />
+      </div>
       <div
         className='tracksList'
         style={{
@@ -61,6 +80,14 @@ const SearchResultsPage = (props) => {
           </Grid>
         ))}
       </div>
+
+      <div className='pagionation'>
+        <MyPagination
+          total={total}
+          page={currentPage}
+          handleChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 };
@@ -69,9 +96,11 @@ const mapStateToProps = (state) => {
   return {
     query: state.queries.searchQuery,
     isSubmitting: state.queries.isSubmitting,
+    currentPage: state.queries.currentPage,
   };
 };
 
-export default connect(mapStateToProps, { setSearch, setSubmitting })(
-  SearchResultsPage
-);
+export default connect(mapStateToProps, {
+  setSubmitting,
+  setCurrentPage,
+})(SearchResultsPage);
