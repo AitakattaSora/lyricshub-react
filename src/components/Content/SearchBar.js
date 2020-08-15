@@ -1,6 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSearch, setSubmitting } from '../../redux/reducers/queries-reducer';
+import {
+  setSearch,
+  setSubmitting,
+  setCurrentPage,
+} from '../../redux/reducers/queries-reducer';
 import { TextField, IconButton } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { Formik } from 'formik';
@@ -21,6 +25,7 @@ const SearchBar = (props) => {
         onSubmit={(data, { resetForm }) => {
           props.setSubmitting(true);
           props.setSearch(data.search);
+          props.setCurrentPage(1);
           routeChange();
           props.setSubmitting(false);
           resetForm();
@@ -62,6 +67,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { setSearch, setSubmitting })(
-  SearchBar
-);
+export default connect(mapStateToProps, {
+  setSearch,
+  setSubmitting,
+  setCurrentPage,
+})(SearchBar);

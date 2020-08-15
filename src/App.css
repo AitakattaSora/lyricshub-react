@@ -44,6 +44,10 @@ a:hover {
   padding: 0px 0px 130px 0px;
 }
 
+.search-page {
+  margin-top: 30px;
+}
+
 .footer {
   display: flex;
   align-items: center;
