@@ -10,6 +10,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
+    "concurrently": "^5.3.0",
     "faker": "^4.1.0",
     "formik": "^2.1.5",
     "react": "^16.13.1",
@@ -21,11 +22,15 @@
     "yup": "^0.29.3"
   },
   "scripts": {
-    "start": "BROWSER=NONE react-scripts start",
+    "start": "concurrently \"yarn server\" \"yarn app\"",
+    "dev": "concurrently \"yarn test-server\" \"yarn no-browser\"",
+    "app": "react-scripts start",
+    "no-browser": "BROWSER=NONE react-scripts start",
+    "server": "json-server db/lyrics.json -p 3001 --middlewares db/singular.js",
+    "test-server": "json-server db/index.js -p 3001 --middlewares db/singular.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "json-server db/index.js -p 3001 --middlewares db/singular.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
