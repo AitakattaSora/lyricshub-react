@@ -1,43 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import TrackCard from './TrackCard';
-import {
-  setSubmitting,
-  setCurrentPage,
-} from '../../redux/reducers/queries-reducer';
+import { setCurrentPage } from '../../redux/reducers/queries-reducer';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { LyricsAPI } from '../../api/api';
-import Loader from '../common/Loader';
 import MyPagination from '../common/MyPagination';
 
-const SearchResultsPage = ({
-  query,
-  currentPage,
-  isSubmitting,
-  setSubmitting,
-  setCurrentPage,
-}) => {
+const SearchResultsPage = ({ query, currentPage, setCurrentPage }) => {
   const [tracks, setTracks] = useState([]);
   const [total, setTotal] = useState(0);
 
   const pageSize = 5;
 
   useEffect(() => {
-    setSubmitting(true);
-
     LyricsAPI.getTracksByQuery(query, currentPage, pageSize).then(
       ({ data, total }) => {
         setTotal(Math.ceil(total / pageSize));
-        setSubmitting(false);
         setTracks(data);
       }
     );
-  }, [query, currentPage, setSubmitting]);
-
-  if (isSubmitting) {
-    return <Loader />;
-  }
+  }, [query, currentPage]);
 
   if (tracks.length === 0) {
     return <div className='search-page'>No results</div>;
@@ -95,12 +78,10 @@ const SearchResultsPage = ({
 const mapStateToProps = (state) => {
   return {
     query: state.queries.searchQuery,
-    isSubmitting: state.queries.isSubmitting,
     currentPage: state.queries.currentPage,
   };
 };
 
 export default connect(mapStateToProps, {
-  setSubmitting,
   setCurrentPage,
 })(SearchResultsPage);
