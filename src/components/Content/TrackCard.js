@@ -73,4 +73,4 @@ const Track = (props) => {
   );
 };
 
-export default Track;
+export default React.memo(Track);
